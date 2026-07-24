@@ -1,0 +1,10 @@
+[project]
+name = "demo-01-langsmith-basics"
+version = "0.1.0"
+description = "Introduction to LangSmith observability - setup, tracing basics with @traceable decorator"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langsmith>=0.1.0",
+    "python-dotenv>=1.0.0",
+]

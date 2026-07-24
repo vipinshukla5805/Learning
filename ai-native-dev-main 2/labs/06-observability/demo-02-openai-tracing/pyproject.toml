@@ -1,0 +1,11 @@
+[project]
+name = "demo-02-openai-tracing"
+version = "0.1.0"
+description = "Tracing OpenAI API calls with LangSmith - wrap_openai and @traceable patterns"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langsmith>=0.1.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]

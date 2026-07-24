@@ -1,0 +1,11 @@
+[project]
+name = "demo-03-custom-metadata-and-feedback"
+version = "0.1.0"
+description = "Custom run metadata, user feedback, and programmatic run management in LangSmith"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langsmith>=0.1.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]

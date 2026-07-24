@@ -1,0 +1,13 @@
+[project]
+name = "demo-06-langsmith-evaluation"
+version = "0.1.0"
+description = "LangSmith datasets, automated evaluation, and custom evaluators"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langsmith>=0.1.0",
+    "langchain>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+]

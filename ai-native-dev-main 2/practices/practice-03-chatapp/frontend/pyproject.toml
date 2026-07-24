@@ -1,0 +1,10 @@
+[project]
+name = "ai-chat-frontend"
+version = "1.0.0"
+description = "Streamlit frontend for AI Chat Application with FastAPI backend integration"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "streamlit>=1.28.0",
+    "requests>=2.31.0",
+]
