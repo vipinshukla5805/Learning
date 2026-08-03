@@ -1,0 +1,184 @@
+:host {
+  display: block;
+  max-width: var(--rb-max);
+}
+
+.rb-home__body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+}
+
+.recipe-list__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.dynamic-host:empty {
+  display: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.status {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--rb-radius);
+  background: color-mix(in srgb, var(--rb-accent) 10%, white);
+  color: var(--rb-ink);
+  font-size: 0.92rem;
+}
+
+.header-note {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rb-muted);
+}
+
+.visually-panel-title {
+  margin: 0;
+  font: inherit;
+  font-weight: 650;
+}
+
+.template-note {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--rb-radius);
+  border: 1px dashed color-mix(in srgb, var(--rb-accent) 28%, transparent);
+  color: var(--rb-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.template-note code {
+  font-size: 0.84em;
+  color: var(--rb-ink);
+}
+
+.bind-lab {
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--rb-accent);
+  border-radius: calc(var(--rb-radius) + 0.1rem);
+  background: #fff;
+}
+
+.bind-lab--dense {
+  padding: 0.5rem 0.75rem;
+}
+
+.bind-lab--warm {
+  background: color-mix(in srgb, #c45c26 6%, white);
+}
+
+.bind-lab--cool {
+  background: color-mix(in srgb, #2c5f7a 7%, white);
+}
+
+.bind-lab__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rb-muted);
+}
+
+.bind-lab p {
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+}
+
+.bind-lab__hint {
+  color: var(--rb-muted);
+  font-size: 0.85rem;
+}
+
+.bind-lab__hint code {
+  font-size: 0.84em;
+  color: var(--rb-ink);
+}
+
+.bind-lab__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.event-lab,
+.flow-lab,
+.pipe-lab {
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--rb-accent) 22%, transparent);
+  border-radius: calc(var(--rb-radius) + 0.1rem);
+  background: color-mix(in srgb, var(--rb-surface) 55%, white);
+}
+
+.recipe-list__odd {
+  outline: 1px dashed color-mix(in srgb, var(--rb-accent) 20%, transparent);
+  outline-offset: 2px;
+}
+
+.event-lab__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--rb-ink);
+}
+
+.event-lab__field input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--rb-accent) 28%, transparent);
+  border-radius: var(--rb-radius);
+  font: inherit;
+  font-weight: 400;
+}
+
+.event-lab__meta {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--rb-muted);
+}
+
+.event-lab__meta code {
+  color: var(--rb-ink);
+}
+
+.event-lab__link {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: var(--rb-accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.event-lab__hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--rb-muted);
+  line-height: 1.4;
+}
+
+.event-lab__hint code,
+.event-lab__hint kbd {
+  font-size: 0.84em;
+  color: var(--rb-ink);
+}
+
+.event-lab__hint kbd {
+  padding: 0.05rem 0.3rem;
+  border: 1px solid color-mix(in srgb, var(--rb-accent) 25%, transparent);
+  border-radius: 0.2rem;
+  background: #fff;
+}

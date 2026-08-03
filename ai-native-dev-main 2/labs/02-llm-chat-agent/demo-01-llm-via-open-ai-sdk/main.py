@@ -1,12 +1,12 @@
 """
-Demo 1: Basic OpenAI API Call
-Uses the OpenAI-compatible client to call Google Gemini via the OpenAI SDK.
+Demo 1: Basic OpenAI-compatible API Call
+Uses the OpenAI SDK to call Google Gemini via base_url.
 """
 
 import os
 import logging
 from dotenv import load_dotenv
-from openai import OpenAI  # per the document's pattern
+from openai import OpenAI
 
 # Configure logging
 logging.basicConfig(
@@ -17,37 +17,43 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # 1. Environment setup: load API key, base_url, and model from .env file
+    # 1. Environment setup: load API key, base URL, and model from .env file
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY not found in environment variables!")
-    base_url = os.getenv("GEMINI_BASE_URL")
-    model = os.getenv("GEMINI_MODEL")
-    # 2. Client initialization: OpenAI SDK configured for Gemini via base_url
-    client = OpenAI(
-        api_key=api_key,
-        base_url= base_url
+    base_url = os.getenv(
+        "GEMINI_BASE_URL",
+        "https://generativelanguage.googleapis.com/v1beta/openai/",
     )
+    model = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
+    logger.info(f"Using model: {model}")
+
+    # 2. Client initialization: Gemini OpenAI-compatible endpoint
+    client = OpenAI(api_key=api_key, base_url=base_url)
     logger.info("LLM is calling")
+
     # 3. API invocation: call chat.completions.create()
     response = client.chat.completions.create(
-            model=model,   
-            messages=[
-                {"role": "system", "content": "You are a python expert."},
-                {"role": "user", "content": "What is python programming?"}
-            ]
-        )
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a python expert."},
+            {"role": "user", "content": "What is python programming?"}
+        ]
+    )
 
-    # 5. Response extraction (per doc): access response.choices[0].message.content
-    generated_text = response.choices[0].message.content        
+    # 4. Response extraction: access response.choices[0].message.content
+    generated_text = response.choices[0].message.content
     logger.info(generated_text)
 
-    # 6. Print the usage statistics
+    # 5. Print the usage statistics
     usage = response.usage
-    logger.info(f"Prompt tokens: {usage.prompt_tokens}, "
-                f"Completion tokens: {usage.completion_tokens}, "
-                f"Total tokens: {usage.total_tokens}")  
+    logger.info(
+        f"Prompt tokens: {usage.prompt_tokens}, "
+        f"Completion tokens: {usage.completion_tokens}, "
+        f"Total tokens: {usage.total_tokens}"
+    )
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,23 @@
+/* Global styles — not view-encapsulated.
+ * These CAN affect elements inside components that use ViewEncapsulation.Emulated.
+ * Prefer tokens here; keep layout/look of a feature inside the component. */
+
+:root {
+  --rb-ink: #1a1f24;
+  --rb-muted: #5c6570;
+  --rb-surface: #f7f5f2;
+  --rb-accent: #2c3a47;
+  --rb-accent-hover: #1f2a33;
+  --rb-radius: 0.35rem;
+  --rb-font: 'Segoe UI', system-ui, sans-serif;
+  --rb-max: 42rem;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--rb-surface);
+  color: var(--rb-ink);
+  font-family: var(--rb-font);
+}

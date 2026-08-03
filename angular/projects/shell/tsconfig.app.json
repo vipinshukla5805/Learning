@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  },
+  "include": [
+    "src/**/*.ts",
+    "../shared-auth/src/public-api.ts",
+    "../shared-cart/src/public-api.ts",
+    "../shared-data-access/src/public-api.ts",
+    "../shared-ui/src/public-api.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
+}

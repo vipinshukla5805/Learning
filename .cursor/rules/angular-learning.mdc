@@ -1,0 +1,48 @@
+---
+description: Modern Angular 22+ coding standards for this learning project
+globs: angular/**/*.{ts,html,scss}
+alwaysApply: false
+---
+
+# Angular 22+ Best Practices
+
+You are teaching and writing modern Angular (v22+). Prefer current APIs; do not generate NgModule-era patterns unless the learner explicitly asks for historical comparison.
+
+## Core rules
+
+- Always use standalone components (default). Do NOT set `standalone: true`.
+- Use signals for component state; use `computed()` for derived state; use `update`/`set` (never `mutate`).
+- Use `input()` / `output()` / `model()` instead of `@Input()` / `@Output()`.
+- Use `inject()` instead of constructor injection.
+- Use native control flow: `@if`, `@for`, `@switch` — never `*ngIf`, `*ngFor`, `*ngSwitch`.
+- Prefer `class` / `style` bindings over `ngClass` / `ngStyle`.
+- Prefer reactive forms over template-driven forms.
+- Put host bindings in the `host` object, not `@HostBinding` / `@HostListener`.
+- Lazy-load feature routes.
+- Prefer `ChangeDetectionStrategy.OnPush` (and explain why when teaching).
+- Prefer `providedIn: 'root'` for singleton services.
+
+## Teaching mode
+
+When the user is learning:
+
+1. Call Angular MCP `get_best_practices` and `search_documentation` before inventing APIs.
+2. Prefer MCP `ai_tutor` when they ask for a guided lesson.
+3. Explain *why* (change detection, reactivity, DI hierarchy), not only *how*.
+4. Show a small working example, then a short exercise for them to try.
+5. Contrast modern vs legacy only when it clarifies concepts (e.g. signals vs RxJS Subject for UI state).
+
+## Project layout
+
+Workspace: `angular/` — Native Federation online store.
+
+- Host: `projects/shell`
+- Remotes: `projects/catalog`, `projects/cart`, `projects/checkout`
+- Contracts: `@store/auth`, `@store/cart-api`, `@store/data-access`, `@store/ui`
+
+Enterprise service rules for this repo:
+
+- Share contracts + tokens via shared mappings; shell provides implementations.
+- Remotes inject `AUTH_SESSION` / `CART_STORE` / `API_BASE_URL` — do not create second stores.
+- Prefer `initFederation(...).then(r => r.loadRemoteModule)` over the deprecated top-level helper.
+- Generate features with the CLI when scaffolding new work.

@@ -1,0 +1,272 @@
+<!--
+  Phase 1B · 1B.6–1B.13
+  pipes | ng-content (panel) | ng-template | ng-container | #vars / @let | @defer
+-->
+<rb-header
+  title="Smart Recipe Box"
+  tagline="Create, organize, and cook from your own collection."
+>
+  <span rbHeaderActions class="header-note">Phase 2–4 · signals · DI · routing</span>
+</rb-header>
+
+<section class="rb-home__body">
+  <rb-signals-lab />
+  <rb-di-lab />
+
+  <section
+    class="bind-lab"
+    [class.bind-lab--dense]="dense()"
+    [class]="labClasses()"
+    [style.border-color]="accent()"
+    [attr.data-theme]="theme()"
+    [attr.aria-label]="labAria()"
+  >
+    <p class="bind-lab__title">Binding lab</p>
+    <p>
+      Theme is <strong>{{ theme() | titlecase }}</strong> · cards:
+      <strong>{{ cardCount() }}</strong>
+    </p>
+    <div class="bind-lab__actions">
+      <button type="button" rb-action-secondary (pressed)="cycleTheme()">
+        Cycle theme ({{ theme() }})
+      </button>
+      <button
+        type="button"
+        rb-action-secondary
+        [attr.aria-pressed]="dense()"
+        (pressed)="dense.set(!dense())"
+      >
+        {{ dense() ? 'Comfortable' : 'Dense' }} layout
+      </button>
+    </div>
+  </section>
+
+  <section class="event-lab">
+    <p class="bind-lab__title">Two-way lab</p>
+
+    <label class="event-lab__field">
+      Filter recipes
+      <input
+        #filterInput
+        type="search"
+        name="filter"
+        [(ngModel)]="filterQuery"
+        (ngModelChange)="status.set('ngModel → filterQuery')"
+        (keyup.enter)="onFilterEnter()"
+        (keyup.escape)="clearFilter()"
+        placeholder="[(ngModel)] · #filterInput · Enter / Esc"
+      />
+    </label>
+
+    <div class="event-lab__field">
+      <span>Servings (child model)</span>
+      <rb-servings-stepper
+        [(servings)]="servings"
+        (servingsChange)="status.set('model() servings → ' + $event)"
+      />
+      <span class="event-lab__meta">Parent signal: <strong>{{ servings() }}</strong></span>
+    </div>
+
+    <p class="event-lab__meta">
+      Filter: <strong>{{ filterQuery() || '(none)' }}</strong>
+      · linked draft: <strong>{{ filterDraft() || '(none)' }}</strong>
+    </p>
+
+    <button type="button" rb-action-secondary (pressed)="focusFilter()">
+      Focus filter (#filterInput)
+    </button>
+
+    <a href="#add-recipe" class="event-lab__link" (click)="onAddAnchorClick($event)">
+      Jump to add (intercepted)
+    </a>
+  </section>
+
+  <section class="flow-lab">
+    <p class="bind-lab__title">Control flow</p>
+    <div class="bind-lab__actions">
+      <button type="button" rb-action-secondary (pressed)="courseFilter.set('all')">All</button>
+      <button type="button" rb-action-secondary (pressed)="courseFilter.set('mains')">Mains</button>
+      <button type="button" rb-action-secondary (pressed)="courseFilter.set('breakfast')">
+        Breakfast
+      </button>
+      <button type="button" rb-action-secondary (pressed)="courseFilter.set('sides')">Sides</button>
+    </div>
+
+    @switch (courseFilter()) {
+      @case ('all') {
+        <p class="event-lab__hint">Showing every course.</p>
+      }
+      @case ('mains') {
+        <p class="event-lab__hint">Dinner-ish mains only.</p>
+      }
+      @case ('breakfast') {
+        <p class="event-lab__hint">Morning plates.</p>
+      }
+      @default {
+        <p class="event-lab__hint">Sides / extras.</p>
+      }
+    }
+  </section>
+
+  <!-- 1B.6 Pipes lab -->
+  <section class="pipe-lab">
+    <p class="bind-lab__title">Pipes</p>
+    @let first = visibleRecipes()[0];
+    @if (first; as recipe) {
+      <p>
+        {{ recipe.name | titlecase }} ·
+        {{ recipe.minutes | cookMinutes:'short' }} ·
+        {{ recipe.cost | currency:'USD':'symbol':'1.2-2' }} ·
+        updated {{ recipe.updatedAt | date:'mediumDate' | uppercase }}
+      </p>
+      <p class="event-lab__hint">
+        slug <code>{{ recipe.name | kebabCase }}</code>
+        · avg {{ avgCost() | currency }}
+        · fill {{ fillRate() | percent:'1.0-0' }}
+        · debug {{ { id: recipe.id, m: recipe.minutes } | json }}
+      </p>
+    } @else {
+      <p class="event-lab__hint">No recipe for pipe samples — clear filters.</p>
+    }
+    <p class="event-lab__meta">
+      Async tip: {{ pantryTip$ | async }}
+    </p>
+    <rb-whitespace-demo />
+  </section>
+
+  <!-- 1C — Directives -->
+  <section class="pipe-lab">
+    <p class="bind-lab__title">Directives</p>
+    <p [rbHighlight]="accent()" defaultColor="#ffe8a3">
+      Hover me — attribute directive <code>[rbHighlight]</code>
+    </p>
+    <p class="event-lab__hint">
+      Prefer bindings over <code>ngNonBindable</code> (legacy CommonModule).
+      Literal braces: <code>&#123;&#123; 1 + 1 &#125;&#125;</code>
+    </p>
+    <div class="bind-lab__actions">
+      <button
+        type="button"
+        rb-action-secondary
+        (pressed)="hideDirectiveDemo.set(!hideDirectiveDemo())"
+      >
+        Toggle *rbUnless
+      </button>
+    </div>
+    <p *rbUnless="hideDirectiveDemo()">
+      Structural <code>*rbUnless</code> — hidden when the flag is true.
+    </p>
+    <p class="event-lab__hint">
+      Cards use <code>hostDirectives: [RbFocusRingDirective]</code> → bind
+      <code>[focusRing]</code> on <code>rb-recipe-card</code>.
+    </p>
+  </section>
+
+  <!-- 1B.8 / 1B.9 — ng-template + NgTemplateOutlet; ng-container groups without a DOM node -->
+  <ng-template #metaTpl let-r="recipe" let-s="servings">
+    <p class="template-note whitespace-demo">
+      Scaling <strong>{{ r.name }}</strong>   to   {{ s }} servings
+      ({{ r.minutes | cookMinutes }} base · {{ r.cost | number:'1.0-2' }} USD).
+    </p>
+  </ng-template>
+
+  @if (visibleRecipes()[0]; as top) {
+    <ng-container
+      [ngTemplateOutlet]="metaTpl"
+      [ngTemplateOutletContext]="{ recipe: top, servings: servings() }"
+    />
+  } @else {
+    <ng-container>
+      <p class="template-note">ng-template context empty — clear filters to see outlet.</p>
+    </ng-container>
+  }
+
+  <ng-container *ngComponentOutlet="promoComponent(); inputs: promoInputs()" />
+
+  <!-- 1B.11 @defer -->
+  @defer (on viewport; prefetch on idle) {
+    <rb-tip-banner
+      title="Deferred chef note"
+      body="&#64;defer loads this when near the viewport (prefetch on idle)."
+    />
+  } @placeholder {
+    <p class="template-note">&#64;defer placeholder…</p>
+  } @loading (minimum 200ms) {
+    <p class="template-note">Loading deferred tip…</p>
+  } @error {
+    <p class="template-note">Defer failed.</p>
+  }
+
+  <div class="toolbar">
+    <button type="button" rb-action-secondary (pressed)="togglePromo()">
+      Toggle promo
+    </button>
+    <button type="button" rb-action-secondary (pressed)="spawnDynamicCard()">
+      Spawn card
+    </button>
+    <button type="button" rb-action-secondary (pressed)="clearDynamicHost()">
+      Clear dynamic host
+    </button>
+    <button type="button" rb-action-secondary (pressed)="focusFirstPanelAdd()">
+      Focus Add
+    </button>
+    <button type="button" rb-action-secondary (pressed)="store.toggleDemoCard()">
+      {{ showDemoCard() ? 'Hide' : 'Show' }} demo card
+    </button>
+  </div>
+
+  @if (status()) {
+    <p
+      #statusBox
+      class="status"
+      role="status"
+      tabindex="-1"
+      [attr.data-count]="cardCount()"
+    >
+      {{ status() }}
+    </p>
+  }
+
+  <div class="dynamic-host" role="list">
+    <ng-container #dynamicHost />
+  </div>
+
+  <!-- 1B.7 ng-content: rb-panel slots (title / actions / default) -->
+  <rb-panel>
+    <h2 ngProjectAs="[rbPanelTitle]" class="visually-panel-title">Your recipes</h2>
+
+    <button
+      rbPanelActions
+      rb-action
+      [busy]="adding()"
+      [attr.aria-label]="adding() ? 'Adding recipe' : 'Add recipe'"
+      (pressed)="onAddPressed()"
+    >
+      {{ adding() ? 'Working…' : 'Add recipe' }}
+    </button>
+
+    <div class="recipe-list" role="list" [attr.aria-busy]="adding()">
+      @for (recipe of visibleRecipes(); track recipe.id; let i = $index; let odd = $odd) {
+        <a class="recipe-list__link" [routerLink]="['recipe', recipe.id]">
+          <rb-recipe-card
+            [class.recipe-list__odd]="odd"
+            [attr.data-index]="i"
+            [name]="recipe.name"
+            [summary]="recipe.summary ?? ''"
+            [minutes]="recipe.minutes"
+            [featured]="!!recipe.featured"
+            [focusRing]="accent()"
+            (selected)="onRecipeSelected($event)"
+            (removed)="onRecipeRemoved($event)"
+          />
+        </a>
+      } @empty {
+        @if (filterQuery() || courseFilter() !== 'all') {
+          <rb-empty-state title="No matches" hint="Try clearing filters." compact />
+        } @else {
+          <rb-empty-state title="No recipes yet" hint="Add one when forms land." />
+        }
+      }
+    </div>
+  </rb-panel>
+</section>
